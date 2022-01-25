@@ -1,7 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './styles.module.css';
-import { DataGrid } from '@mui/x-data-grid';
-import Search from '../Search/index';
+// import { DataGrid } from '@mui/x-data-grid';
+// import { style } from '@mui/system';
+// import { BasicTable } from '../Table/BasicTable';
+// import { SortingTable } from '../Table/SortingTable';
+import { FilteringTable } from '../Table/FiltertingTable';
+
+const USERS = [
+  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
+  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
+  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
+  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
+  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
+  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
+  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
+  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
+  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+];
 
 const Main = () => {
   const handleLogout = () => {
@@ -9,10 +24,7 @@ const Main = () => {
     window.location.reload();
   };
 
-  const { search } = window.location;
-  const query = new URLSearchParams(search).get('s');
-  const [searchQuery, setSearchQuery] = useState(query || '');
-  const filteredPosts = filterPosts(rows, searchQuery);
+  const [users, setUsers] = useState(USERS);
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
@@ -37,17 +49,28 @@ const Main = () => {
     },
   ];
 
-  const rows = [
-    { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-    { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-    { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-    { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-    { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-    { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-    { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-    { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-    { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-  ];
+  // const onSearch = (e) => {
+  //   console.log(e.target.value);
+  //   if (e.target.value) {
+  //     const data = [...USERS];
+  //     const searchedUsers = data.filter(
+  //       (user) =>
+  //         (user.firstName &&
+  //           user.firstName
+  //             .toLowerCase()
+  //             .includes(e.target.value.toLowerCase())) ||
+  //         (user.lastName &&
+  //           user.lastName
+  //             .toLowerCase()
+  //             .includes(e.target.value.toLowerCase())) ||
+  //         (user.age && user.age.toString().includes(e.target.value.toString()))
+  //     );
+  //     console.log(searchedUsers);
+  //     setUsers(searchedUsers);
+  //   } else {
+  //     setUsers(USERS);
+  //   }
+  // };
 
   return (
     <div>
@@ -56,39 +79,30 @@ const Main = () => {
           <a className="navbar-brand" href="/">
             Welcome User
           </a>
-          {/* <div className="d-flex">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-              id="mysearch"
-              onKeyUp="search()"
-            />
-            <button class="btn btn-outline-success" type="submit">
-              Search
-            </button>
-          </div> */}
-          <Search searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-          <ul>
-            {filteredPosts.map((post) => (
-              <li key={post.key}>{post.name}</li>
-            ))}
-          </ul>
         </div>
+        {/* <div className={styles.search}>
+          <input
+            type="search"
+            onInput={onSearch}
+            placeholder="Search Table iteam"
+          />
+        </div> */}
         <button className={styles.white_btn} onClick={handleLogout}>
           Logout
         </button>
       </nav>
-      <div style={{ height: 400, width: '100%' }}>
+      {/* <BasicTable /> */}
+      {/* <SortingTable /> */}
+      <FilteringTable />
+      {/* <div style={{ height: 400, width: '100%' }}>
         <DataGrid
-          rows={rows}
+          rows={users}
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[5]}
           checkboxSelection
         />
-      </div>
+      </div> */}
     </div>
   );
 };

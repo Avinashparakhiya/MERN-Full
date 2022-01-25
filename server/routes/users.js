@@ -49,8 +49,9 @@ router.get('/:id/verify/:token', async (req, res) => {
       token: req.params.token,
     });
     if (!token) return res.status(400).send({ message: 'Invalid Token' });
+    console.log(token);
 
-    await User.updateOne({ _id: user._id, verified: true });
+    await User.updateOne({ _id: user._id }, { $set: { verified: true } });
     await token.remove();
 
     res.status(200).send({ message: 'Email verified successfully' });

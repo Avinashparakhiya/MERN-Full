@@ -1,11 +1,11 @@
-const express = require('express');
-const router = express.Router();
+const router = require('express').Router();
+
 const fetchuser = require('../Middle/fetchuser');
 const Note = require('../models/Note');
 const { body, validationResult } = require('express-validator');
 
 // ROUTE 1: Get All the Notes using: GET "/api/notes/getuser". Login required
-router.get('/allnotes', fetchuser, async (req, res) => {
+router.get('/fetchallnotes', fetchuser, async (req, res) => {
   try {
     const notes = await Note.find({ user: req.user.id });
     res.json(notes);
@@ -20,9 +20,13 @@ router.post(
   '/addnote',
   fetchuser,
   [
-    body('firstname', 'Enter a valid firstname'),
-    body('lastname', 'Enter a valid lastname'),
-    body('age', 'Enter a valid age'),
+    body('firstname', 'Enter a valid firstname').isLength({ min: 3 }),
+    body('lastname', 'Enter A Valid Lastname').isLength({
+      min: 5,
+    }),
+    body('age', 'Enter A Valid age').isLength({
+      min: 1,
+    }),
   ],
   async (req, res) => {
     try {
@@ -51,7 +55,7 @@ router.post(
 
 // ROUTE 3: Update an existing Note using: PUT "/api/notes/updatenote". Login required
 router.put('/updatenote/:id', fetchuser, async (req, res) => {
-  const { title, description, tag } = req.body;
+  const { firstname, lastname, age } = req.body;
   try {
     // Create a newNote object
     const newNote = {};
